@@ -1,5 +1,6 @@
 @model MediCare.Presentation.Web.Frontend.Mvc.Areas.Patient.ViewModels.AppointmentsViewModel
 @using MediCare.Common.Enum
+@using MediCare.Presentation.Web.Frontend.Mvc.Helpers
 
 @{
     ViewData["Title"] = "Appointments";
@@ -53,7 +54,7 @@
                         {
                             <tr>
                                 <td><strong>Dr. @slot.DoctorName</strong><br /><span class="small text-secondary">@slot.ClinicName · @slot.ClinicAddress</span></td>
-                                <td>@slot.StartAt.ToString("ddd, dd MMM yyyy · HH:mm")</td>
+                                <td>@AppointmentTime.Format(slot.StartAt)</td>
                                 <td>@slot.ConsultationFee.ToString("0.##") EGP</td>
                                 <td class="text-end">
                                     <form asp-action="Book" method="post">
@@ -88,7 +89,7 @@
                         {
                             <tr>
                                 <td><strong>Dr. @appointment.DoctorName</strong><br /><span class="small text-secondary">@appointment.ClinicName · @appointment.ClinicAddress</span></td>
-                                <td>@appointment.StartAt.ToString("ddd, dd MMM yyyy · HH:mm")</td>
+                                <td>@AppointmentTime.Format(appointment.StartAt)</td>
                                 <td><span class="badge @(appointment.StatusId == (int)AppointmentStatusEnum.Confirmed ? "text-bg-success" : appointment.StatusId == (int)AppointmentStatusEnum.Cancelled ? "text-bg-secondary" : "text-bg-primary")">@appointment.Status</span></td>
                                 <td class="text-end">
                                     @if (appointment.StatusId == (int)AppointmentStatusEnum.Confirmed && appointment.StartAt > DateTime.UtcNow)
@@ -102,7 +103,7 @@
                                                     <option value="">Choose a new time</option>
                                                     @foreach (var availableSlot in Model.AvailableSlots)
                                                     {
-                                                        <option value="@availableSlot.SlotId">Dr. @availableSlot.DoctorName · @availableSlot.StartAt.ToString("dd MMM, HH:mm") · @availableSlot.ClinicName</option>
+                                                        <option value="@availableSlot.SlotId">Dr. @availableSlot.DoctorName · @AppointmentTime.Format(availableSlot.StartAt, "dd MMM, HH:mm") · @availableSlot.ClinicName</option>
                                                     }
                                                 </select>
                                                 <button type="submit" class="btn btn-outline-primary btn-sm">Save</button>

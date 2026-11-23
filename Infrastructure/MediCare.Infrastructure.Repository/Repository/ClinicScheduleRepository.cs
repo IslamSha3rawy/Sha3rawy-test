@@ -1,6 +1,7 @@
 using MediCare.Common.Enum;
 using MediCare.Core.Entity.Entity;
 using MediCare.Core.IRepository.IRepository;
+using MediCare.Core.IRepository.Exceptions;
 using MediCare.Infrastructure.Repository.Context;
 using Microsoft.EntityFrameworkCore;
 
@@ -84,9 +85,16 @@ public sealed class ClinicScheduleRepository : IClinicScheduleRepository
     public async Task AddSlotsAsync(IReadOnlyCollection<Slot> slots)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        await _dbContext.Slots.AddRangeAsync(slots);
-        await _dbContext.SaveChangesAsync();
-        await transaction.CommitAsync();
+        try
+        {
+            await _dbContext.Slots.AddRangeAsync(slots);
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (DbUpdateException ex)
+        {
+            throw new SchedulePersistenceException(ex);
+        }
     }
 
     public Task<List<ScheduleException>> GetScheduleExceptionsAsync(int clinicDoctorId, DateOnly startDate, DateOnly endDate) =>

@@ -34,4 +34,7 @@
   <Folder Name="/Presentation/Web/Identity/">
     <Project Path="Presentation/Web/Identity/MediCare.Presentation.Web.Identity.Api/MediCare.Presentation.Web.Identity.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MediCare.Tests/MediCare.Tests.csproj" />
+  </Folder>
 </Solution>

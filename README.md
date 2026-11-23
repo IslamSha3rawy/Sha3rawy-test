@@ -78,11 +78,11 @@ Swagger is enabled in the Development environment. Local HTTPS requires a truste
 
 ## Important behavior
 
-- Schedule dates and times are stored and interpreted as UTC.
+- Schedule dates and times are stored and interpreted as UTC. Patient appointment lists and reschedule choices display Cairo time with the applicable UTC offset, including daylight saving time.
 - Changing working hours or schedule exceptions preserves booked appointments. Regenerate slots after changing an exception.
 - Attachments are stored outside `wwwroot`; configure private, backed-up storage and restrict access to the application identity.
 - Notifications are in-app only. No email or SMS provider is configured.
-- Automated unit and integration test projects are not currently included. A successful build and local smoke checks do not replace workflow and authorization tests.
+- Run `dotnet test tests/MediCare.Tests` for time-formatting and relational repository regression tests. GitHub Actions builds and runs them on pushes and pull requests. These tests use SQLite, not SQL Server: SQL Server locking/deadlock behavior and full HTTP authentication/authorization still need provider-specific and end-to-end coverage.
 
 ## Team
 
