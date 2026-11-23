@@ -8,7 +8,7 @@ using MediCare.Core.Entity.Entity;
 using MediCare.Core.IRepository.IUnitOfWork;
 using MediCare.IApplication.BackEnd.IAppService;
 using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
+using MediCare.Core.IRepository.Exceptions;
 
 namespace MediCare.Application.BackEnd.AppService;
 
@@ -212,7 +212,7 @@ public sealed class ClinicScheduleService : BaseAppService, IClinicScheduleServi
             {
                 await UnitOfWork.ClinicScheduleRepository.AddSlotsAsync(slots);
             }
-            catch (DbUpdateException ex)
+            catch (SchedulePersistenceException ex)
             {
                 Logger.LogWarning(ex, "Concurrent slot generation conflicted for clinic-doctor {ClinicDoctorId}.", clinicDoctorId);
                 return response.GetErrorResponse("Available times changed while generating the schedule. Run generation again.");
